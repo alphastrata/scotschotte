@@ -1,0 +1,19 @@
+[package]
+name = "scotschotte"
+version = "0.1.0"
+authors = ["Scott Harper <orcein@gmail.com>"]
+edition = "2018"
+build = "build.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+vulkano = "0.13"
+
+[dependencies.gtk]
+version = "0.7.0"
+features = ["v3_16"]
+
+[dependencies.gio]
+version = "0.7.0"
+features = ["v2_44"]
