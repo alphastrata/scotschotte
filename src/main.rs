@@ -1,6 +1,13 @@
 extern crate gio;
 extern crate gtk;
 
+#[macro_use]
+extern crate relm;
+#[macro_use]
+extern crate relm_derive;
+
+mod ui;
+
 use gio::prelude::*;
 use gtk::prelude::*;
 use gtk::{
@@ -9,21 +16,10 @@ use gtk::{
     ScrolledWindowBuilder, Window, WindowPosition,
 };
 
-use std::env::args;
+use relm::Widget;
 
-// upgrade weak reference or return
-#[macro_export]
-macro_rules! upgrade_weak {
-    ($x:ident, $r:expr) => {{
-        match $x.upgrade() {
-            Some(o) => o,
-            None => return $r,
-        }
-    }};
-    ($x:ident) => {
-        upgrade_weak!($x, ())
-    };
-}
+use std::env::args;
+use crate::ui::root_window::SchotteRootWindow;
 
 fn build_ui(application: &gtk::Application) {
     let window = ApplicationWindow::new(application);
@@ -85,7 +81,7 @@ fn build_ui(application: &gtk::Application) {
                 ("_Open", ResponseType::Accept),
             ],
         );
-        let res = dialog.run();
+        let res: ResponseType = dialog.run();
         dbg!(res);
         if let ResponseType::Accept = res {
             dbg!(dialog.get_filename());
@@ -112,15 +108,17 @@ fn build_ui(application: &gtk::Application) {
 }
 
 fn main() {
-    let application = gtk::Application::new(
-        Some("com.github.gtk-rs.examples.menu_bar"),
-        Default::default(),
-    )
-    .expect("Initialization failed...");
+    SchotteRootWindow::run(()).unwrap();
 
-    application.connect_activate(|app| {
-        build_ui(app);
-    });
-
-    application.run(&args().collect::<Vec<_>>());
+//    let application = gtk::Application::new(
+//        Some("com.github.gtk-rs.examples.menu_bar"),
+//        Default::default(),
+//    )
+//    .expect("Initialization failed...");
+//
+//    application.connect_activate(|app| {
+//        build_ui(app);
+//    });
+//
+//    application.run(&args().collect::<Vec<_>>());
 }
