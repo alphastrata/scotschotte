@@ -1,4 +1,4 @@
-use relm::{Relm, Update, Widget};
+use relm::{Relm, Update, Widget, init, Component};
 use relm_derive::{Msg,};
 use gtk::prelude::*;
 use gtk::{
@@ -7,6 +7,8 @@ use gtk::{
     ScrolledWindowBuilder, Window, WindowPosition, WindowType,
 };
 
+use super::file_menu::FileMenu;
+
 pub struct SchotteAppModel {
 
 }
@@ -14,25 +16,27 @@ pub struct SchotteAppModel {
 pub struct SchotteRootWindow {
     model: SchotteAppModel,
     window: Window,
+    menubar: MenuBar,
+    file_menu: Component<FileMenu>,
 }
 
 #[derive(Msg)]
-pub enum Msg {
+pub enum RootMsg {
     Quit,
 }
 
 impl Update for SchotteRootWindow {
     type Model = SchotteAppModel;
     type ModelParam = ();
-    type Msg = Msg;
+    type Msg = RootMsg;
 
     fn model(_: &Relm<Self>, _: ()) -> Self::Model {
         Self::Model{}
     }
 
-    fn update(&mut self, event: Msg) {
+    fn update(&mut self, event: RootMsg) {
         match event {
-            Msg::Quit => gtk::main_quit(),
+            RootMsg::Quit => gtk::main_quit(),
         }
     }
 }
@@ -51,13 +55,29 @@ impl Widget for SchotteRootWindow {
         window.set_position(WindowPosition::Center);
         window.set_size_request(400, 400);
 
-        connect!(relm, window, connect_delete_event(_, _), return (Some(Msg::Quit), Inhibit(false)));
+        connect!(relm, window, connect_delete_event(_, _), return (Some(RootMsg::Quit), Inhibit(false)));
 
-        window.show_all();
+        let vbox = gtk::Box::new(gtk::Orientation::Vertical, 1);
+        let menubar = MenuBar::new();
 
-        SchotteRootWindow {
+        let file_menu = init::<FileMenu>((menubar.clone(), relm.clone())).expect("Failed to initialize file menu");
+
+        let result = SchotteRootWindow {
             model,
             window,
-        }
+            menubar,
+            file_menu,
+        };
+
+        let scrolled_window = ScrolledWindowBuilder::new().build();
+        let label = Label::new(Some("Image Opener"));
+
+        vbox.pack_start(&result.menubar, false, false, 0);
+        vbox.pack_start(&scrolled_window, true, true, 0);
+        vbox.pack_start(&label, false, false, 0);
+
+        result.window.add(&vbox);
+        result.window.show_all();
+        result
     }
 }
