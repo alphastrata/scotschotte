@@ -1,11 +1,11 @@
-use relm::{Relm, Update, Widget};
-use relm_derive::{Msg,};
 use gtk::prelude::*;
 use gtk::{
     AboutDialog, AccelFlags, AccelGroup, ApplicationWindow, CheckMenuItem, FileChooserAction,
-    FileChooserDialog, IconSize, Image, Label, Layout, Menu, MenuBar, MenuItem, ResponseType,
-    ScrolledWindowBuilder, Window, WindowPosition, Object,
+    FileChooserDialog, IconSize, Image, Label, Layout, Menu, MenuBar, MenuItem, Object,
+    ResponseType, ScrolledWindowBuilder, Window, WindowPosition,
 };
+use relm::{Relm, Update, Widget};
+use relm_derive::Msg;
 
 use super::root_window::{RootMsg, SchotteRootWindow};
 
@@ -60,13 +60,24 @@ impl Widget for FileMenu {
         let open_item = MenuItem::new_with_label("Open...");
         let quit_item = MenuItem::new_with_label("Quit");
 
-
         connect!(relm, open_item, connect_activate(_), FileMenuMsg::Open);
-        connect!(model.parent_stream, quit_item, connect_activate(_), RootMsg::Quit);
+        connect!(
+            model.parent_stream,
+            quit_item,
+            connect_activate(_),
+            RootMsg::Quit
+        );
 
         root_item.set_submenu(Some(&menu));
         menu.append(&open_item);
         menu.append(&quit_item);
+
+        for c in menu.get_children() {
+            let mi = c
+                .clone()
+                .downcast::<MenuItem>()
+                .expect("Non-menu item found! D8");
+        }
 
         model.container.append(&root_item);
 

@@ -1,23 +1,26 @@
-use relm::{Relm, Update, Widget, init, Component};
-use relm_derive::{Msg,};
 use gtk::prelude::*;
 use gtk::{
-    Container, AboutDialog, AccelFlags, AccelGroup, ApplicationWindow, CheckMenuItem, FileChooserAction,
-    FileChooserDialog, IconSize, Image, Label, Layout, Menu, MenuBar, MenuItem, ResponseType,
-    ScrolledWindowBuilder, Window, WindowPosition, WindowType,
+    AboutDialog, AccelFlags, AccelGroup, ApplicationWindow, CheckMenuItem, Container,
+    FileChooserAction, FileChooserDialog, IconSize, Image, Label, Layout, Menu, MenuBar, MenuItem,
+    ResponseType, ScrolledWindowBuilder, Window, WindowPosition, WindowType,
 };
+use relm::{init, Component, Relm, Update, Widget};
+use relm_derive::Msg;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 use super::file_menu::FileMenu;
+use super::menu_manager::MenuManager;
 
 pub struct SchotteAppModel {
-
+    menu_manager: MenuManager,
 }
 
 pub struct SchotteRootWindow {
-    model: SchotteAppModel,
+    model: Rc<RefCell<SchotteAppModel>>,
     window: Window,
-    menubar: MenuBar,
-    file_menu: Component<FileMenu>,
+    //menubar: MenuBar,
+    //file_menu: Component<FileMenu>,
 }
 
 #[derive(Msg)]
@@ -31,7 +34,9 @@ impl Update for SchotteRootWindow {
     type Msg = RootMsg;
 
     fn model(_: &Relm<Self>, _: ()) -> Self::Model {
-        Self::Model{}
+        Self::Model {
+            menu_manager: MenuManager::new(),
+        }
     }
 
     fn update(&mut self, event: RootMsg) {
@@ -55,24 +60,37 @@ impl Widget for SchotteRootWindow {
         window.set_position(WindowPosition::Center);
         window.set_size_request(400, 400);
 
-        connect!(relm, window, connect_delete_event(_, _), return (Some(RootMsg::Quit), Inhibit(false)));
+        connect!(
+            relm,
+            window,
+            connect_delete_event(_, _),
+            return (Some(RootMsg::Quit), Inhibit(false))
+        );
 
         let vbox = gtk::Box::new(gtk::Orientation::Vertical, 1);
-        let menubar = MenuBar::new();
 
-        let file_menu = init::<FileMenu>((menubar.clone(), relm.clone())).expect("Failed to initialize file menu");
+        let menubar = model.menu_manager.get_menubar();
+
+        // let file_menu = init::<FileMenu>((menubar.clone(), relm.clone()))
+        //     .expect("Failed to initialize file menu");
 
         let result = SchotteRootWindow {
-            model,
+            model: Rc::new(RefCell::new(model)),
             window,
-            menubar,
-            file_menu,
         };
+        {
+            let mut model = result.model.borrow_mut();
+            let quit_item = model
+                .menu_manager
+                .add_menu_item("File/Stuff/Quit")
+                .expect("Error creating quit menu item");
+            connect!(relm, quit_item, connect_activate(_), RootMsg::Quit);
+        }
 
         let scrolled_window = ScrolledWindowBuilder::new().build();
         let label = Label::new(Some("Image Opener"));
 
-        vbox.pack_start(&result.menubar, false, false, 0);
+        vbox.pack_start(&menubar, false, false, 0);
         vbox.pack_start(&scrolled_window, true, true, 0);
         vbox.pack_start(&label, false, false, 0);
 
