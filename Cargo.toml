@@ -8,8 +8,6 @@ edition = "2018"
 
 [dependencies]
 vulkano = "0.13"
-relm = "^0.17.0"
-relm-derive = "^0.17.0"
 
 [dependencies.gtk]
 version = "0.7.0"

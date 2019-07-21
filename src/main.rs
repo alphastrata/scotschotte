@@ -1,11 +1,8 @@
 extern crate gio;
 extern crate gtk;
 
+mod components;
 #[macro_use]
-extern crate relm;
-#[macro_use]
-extern crate relm_derive;
-
 mod ui;
 
 use gio::prelude::*;
@@ -16,12 +13,10 @@ use gtk::{
     ScrolledWindowBuilder, Window, WindowPosition,
 };
 
-use relm::Widget;
-
 use std::env::args;
-use crate::ui::root_window::SchotteRootWindow;
+use ui::root_window::SchotteApp;
 
-fn build_ui(application: &gtk::Application) {
+fn _build_ui(application: &gtk::Application) {
     let window = ApplicationWindow::new(application);
 
     window.set_title("MenuBar example");
@@ -108,17 +103,14 @@ fn build_ui(application: &gtk::Application) {
 }
 
 fn main() {
-    SchotteRootWindow::run(()).unwrap();
+    let application = gtk::Application::new(
+        Some("com.github.gtk-rs.examples.menu_bar"),
+        Default::default(),
+    )
+    .expect("Initialization failed...");
 
-//    let application = gtk::Application::new(
-//        Some("com.github.gtk-rs.examples.menu_bar"),
-//        Default::default(),
-//    )
-//    .expect("Initialization failed...");
-//
-//    application.connect_activate(|app| {
-//        build_ui(app);
-//    });
-//
-//    application.run(&args().collect::<Vec<_>>());
+    application.connect_activate(|app| {
+        SchotteApp::build(app);
+    });
+    application.run(&args().collect::<Vec<_>>());
 }

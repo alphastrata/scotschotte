@@ -1,5 +1,5 @@
 use gtk::prelude::*;
-use gtk::{Container, Label, Menu, MenuBar, MenuItem, MenuShell, Widget};
+use gtk::{Label, Menu, MenuBar, MenuItem, MenuShell};
 
 #[derive(Debug)]
 pub enum MenuManagerError {
@@ -27,6 +27,7 @@ impl MenuManager {
     // added as needed. The MenuItem at the leaf of the path is returned.
     // TODO: Allow menu items which allow separators in them somehow.
     pub fn add_menu_item(&mut self, path: &'static str) -> Result<MenuItem, MenuManagerError> {
+        println!("Making menu: {}", path);
         let segments: Vec<&str> = path.split(|c| c == '/' || c == '\\').collect();
 
         // Check for empty segments and return an error if found
@@ -66,7 +67,8 @@ impl MenuManager {
                 if let Ok(label) = mi_c.clone().downcast::<Label>() {
                     if let Some(text) = label.get_text() {
                         if text == name {
-                            return mi_c
+                            println!("{:?}", mi_c.get_type());
+                            return mi
                                 .downcast::<MenuItem>()
                                 .expect("MenuItem > Widget roundtrip failed");
                         }
