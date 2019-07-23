@@ -1,4 +1,5 @@
 use gtk::prelude::*;
+#[allow(unused_imports)]
 use gtk::{
     AboutDialog, AccelFlags, AccelGroup, ApplicationWindow, CheckMenuItem, Container,
     FileChooserAction, FileChooserDialog, IconSize, Image, Label, Layout, Menu, MenuBar, MenuItem,

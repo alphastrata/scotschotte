@@ -1,3 +1,4 @@
+#[allow(unused_imports)]
 use gtk::{Container};
 
 // upgrade weak reference or return
