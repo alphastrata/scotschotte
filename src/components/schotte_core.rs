@@ -74,10 +74,7 @@ impl SchotteApp {
             });
         }
 
-        //let scrolled_window = ScrolledWindowBuilder::new().build();
         let label = Label::new(Some("Image Opener"));
-
-        //vbox.pack_start(&scrolled_window, true, true, 0);
         vbox.pack_start(&label, false, false, 0);
 
         result.app_window.add(&vbox);

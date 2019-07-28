@@ -1,5 +1,3 @@
-use gtk::{Container};
-
 // upgrade weak reference or return
 #[macro_export]
 macro_rules! upgrade_weak {

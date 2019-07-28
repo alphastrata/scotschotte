@@ -3,7 +3,7 @@ extern crate gtk;
 
 mod components;
 #[macro_use]
-mod ui;
+mod ui_util;
 
 use gio::prelude::*;
 use gtk::prelude::*;
@@ -14,7 +14,7 @@ use gtk::{
 };
 
 use std::env::args;
-use ui::root_window::SchotteApp;
+use components::schotte_core::SchotteApp;
 
 fn _build_ui(application: &gtk::Application) {
     let window = ApplicationWindow::new(application);
@@ -103,6 +103,8 @@ fn _build_ui(application: &gtk::Application) {
 }
 
 fn main() {
+    println!("I. LiVe. AgAiN.");
+
     let application = gtk::Application::new(
         Some("com.github.gtk-rs.examples.menu_bar"),
         Default::default(),
