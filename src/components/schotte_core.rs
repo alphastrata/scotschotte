@@ -33,7 +33,7 @@ impl SchotteApp {
 
         app_window.set_title("ScotSchotte");
         app_window.set_position(WindowPosition::Center);
-        app_window.set_size_request(400, 400);
+        app_window.set_size_request(400, 400); // Should be a % of monitor's res
 
         let vbox = gtk::Box::new(gtk::Orientation::Vertical, 1);
         let menu_manager = MenuManager::new();
