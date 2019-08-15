@@ -9,10 +9,14 @@ build = "build.rs"
 
 [dependencies]
 vulkano = "0.13"
+rawloader = "*"
 
 [dependencies.gtk]
 version = "0.7.0"
 features = ["v3_16"]
+
+[dependencies.gdk-pixbuf]
+version = "0.7.0"
 
 [dependencies.gio]
 version = "0.7.0"

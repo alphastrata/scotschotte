@@ -2,6 +2,7 @@ use gtk::prelude::*;
 use gtk::{
     FileChooserAction, FileChooserDialog, Image, ResponseType, ScrolledWindowBuilder, Window,
 };
+use gdk_pixbuf::Pixbuf;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -10,7 +11,9 @@ use super::menu_manager::MenuManager;
 trait Document {}
 
 // Storage for information relating to an image document to be viewed/edited
-struct ImageDocument {}
+struct ImageDocument {
+    buffer: Pixbuf,
+}
 
 struct DocumentSystemModel {
     document: Option<ImageDocument>,

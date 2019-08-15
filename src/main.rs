@@ -1,5 +1,6 @@
 extern crate gio;
 extern crate gtk;
+extern crate gdk_pixbuf;
 
 mod components;
 #[macro_use]
