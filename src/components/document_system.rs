@@ -1,8 +1,9 @@
+use gdk_pixbuf::Pixbuf;
+use glib::object::WeakRef;
 use gtk::prelude::*;
 use gtk::{
     FileChooserAction, FileChooserDialog, Image, ResponseType, ScrolledWindowBuilder, Window,
 };
-use gdk_pixbuf::Pixbuf;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -13,20 +14,16 @@ trait Document {}
 // Storage for information relating to an image document to be viewed/edited
 struct ImageDocument {
     buffer: Pixbuf,
+    image_view: WeakRef<Image>,
 }
 
-struct DocumentSystemModel {
-    document: Option<ImageDocument>,
-}
+// Document system model
+trait DocumentModel {}
 
-impl DocumentSystemModel {
-    fn new() -> Self {
-        DocumentSystemModel { document: None }
-    }
-}
-
+// Document System is the user-facing system that can handle multiple
+// document types (probably eventually? anyway, TODO).
 pub struct DocumentSystem {
-    model: Rc<RefCell<DocumentSystemModel>>,
+    model: Rc<RefCell<dyn DocumentModel>>,
 }
 
 impl DocumentSystem {

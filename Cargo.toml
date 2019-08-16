@@ -10,6 +10,7 @@ build = "build.rs"
 [dependencies]
 vulkano = "0.13"
 rawloader = "*"
+glib = ""
 
 [dependencies.gtk]
 version = "0.7.0"
