@@ -1,4 +1,6 @@
 use gdk::EventMotion;
+use gdk_pixbuf::Pixbuf;
+use glib::object::WeakRef;
 use gtk::prelude::*;
 use gtk::{
     EventBox, FileChooserAction, FileChooserDialog, Image, ResponseType, ScrolledWindowBuilder,
@@ -13,17 +15,13 @@ use super::menu_manager::MenuManager;
 trait Document {}
 
 // Storage for information relating to an image document to be viewed/edited
-struct ImageDocument {}
-
-struct DocumentSystemModel {
-    document: Option<ImageDocument>,
+struct ImageDocument {
+    buffer: Pixbuf,
+    image_view: WeakRef<Image>,
 }
 
-impl DocumentSystemModel {
-    fn new() -> Self {
-        DocumentSystemModel { document: None }
-    }
-}
+// Document system model
+trait DocumentModel {}
 
 struct MousePosition {
     x: f64,
@@ -47,8 +45,10 @@ struct MouseNavigator {
     previous_position: MousePosition,
 }
 
+// Document System is the user-facing system that can handle multiple
+// document types (probably eventually? anyway, TODO).
 pub struct DocumentSystem {
-    model: Rc<RefCell<DocumentSystemModel>>,
+    model: Rc<RefCell<dyn DocumentModel>>,
     mouse: Rc<RefCell<MouseNavigator>>,
 }
 

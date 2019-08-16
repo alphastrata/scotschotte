@@ -1,3 +1,4 @@
+extern crate gdk_pixbuf;
 extern crate gio;
 extern crate gtk;
 
@@ -16,7 +17,6 @@ use gtk::{
 };
 
 use components::schotte_core::SchotteApp;
-#[allow(unused_imports)]
 use std::env::args;
 
 fn main() {
