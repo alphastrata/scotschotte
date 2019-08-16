@@ -16,12 +16,20 @@ trait Document {}
 
 // Storage for information relating to an image document to be viewed/edited
 struct ImageDocument {
-    buffer: Pixbuf,
+    buffer: Option<Pixbuf>,
     image_view: WeakRef<Image>,
 }
 
-// Document system model
-trait DocumentModel {}
+impl ImageDocument {
+    fn new() -> Self {
+        ImageDocument {
+            buffer: None,
+            image_view: WeakRef::default(),
+        }
+    }
+}
+
+impl Document for ImageDocument {}
 
 struct MousePosition {
     x: f64,
@@ -48,14 +56,14 @@ struct MouseNavigator {
 // Document System is the user-facing system that can handle multiple
 // document types (probably eventually? anyway, TODO).
 pub struct DocumentSystem {
-    model: Rc<RefCell<dyn DocumentModel>>,
+    model: Rc<RefCell<dyn Document>>,
     mouse: Rc<RefCell<MouseNavigator>>,
 }
 
 impl DocumentSystem {
     pub fn new() -> Self {
         DocumentSystem {
-            model: Rc::new(RefCell::new(DocumentSystemModel::new())),
+            model: Rc::new(RefCell::new(ImageDocument::new())),
             mouse: Rc::new(RefCell::new(MouseNavigator {
                 left_button: None,
                 middle_button: None,
