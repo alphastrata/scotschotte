@@ -1,4 +1,5 @@
 use gtk::prelude::*;
+#[allow(unused_imports)]
 use gtk::{
     AboutDialog, AccelFlags, AccelGroup, ApplicationWindow, CheckMenuItem, Container,
     FileChooserAction, FileChooserDialog, IconSize, Image, Label, Layout, Menu, MenuBar, MenuItem,
@@ -33,7 +34,7 @@ impl SchotteApp {
 
         app_window.set_title("ScotSchotte");
         app_window.set_position(WindowPosition::Center);
-        app_window.set_size_request(400, 400); // Should be a % of monitor's res
+        app_window.set_size_request(400, 400);
 
         let vbox = gtk::Box::new(gtk::Orientation::Vertical, 1);
         let menu_manager = MenuManager::new();
@@ -74,7 +75,10 @@ impl SchotteApp {
             });
         }
 
+        //let scrolled_window = ScrolledWindowBuilder::new().build();
         let label = Label::new(Some("Image Opener"));
+
+        //vbox.pack_start(&scrolled_window, true, true, 0);
         vbox.pack_start(&label, false, false, 0);
 
         result.app_window.add(&vbox);

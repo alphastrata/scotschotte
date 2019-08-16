@@ -6,12 +6,14 @@ mod components;
 #[macro_use]
 mod ui_util;
 
+#[allow(unused_imports)]
 use gio::prelude::*;
 use gtk::prelude::*;
+#[allow(unused_imports)]
 use gtk::{
-    AboutDialog, AccelFlags, AccelGroup, ApplicationWindow, CheckMenuItem, FileChooserAction,
-    FileChooserDialog, IconSize, Image, Label, Layout, Menu, MenuBar, MenuItem, ResponseType,
-    ScrolledWindowBuilder, WidgetExt, Window, WindowPosition,
+    AboutDialog, AccelFlags, AccelGroup, ApplicationWindow, CheckMenuItem, EventBox,
+    FileChooserAction, FileChooserDialog, IconSize, Image, Label, Layout, Menu, MenuBar, MenuItem,
+    ResponseType, ScrolledWindowBuilder, WidgetExt, Window, WindowPosition,
 };
 
 use components::schotte_core::SchotteApp;
