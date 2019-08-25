@@ -3,3 +3,4 @@
 *.code-workspace
 .vscode/
 .idea/
+/legacy_GTK_stuff
